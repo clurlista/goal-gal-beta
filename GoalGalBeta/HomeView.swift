@@ -5,6 +5,7 @@
 //  Created by Claire Lister on 19/06/2025.
 //
 import SwiftUI
+import Foundation
 
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
@@ -17,39 +18,39 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                ScrollView {
-                    VStack(spacing: 20) {
-                        
-                        Text("GoalGal")
-                            .font(.custom("Digital Arcade Regular", size: 36))
-                            .foregroundColor(.purple)
+            ScrollView {
+                VStack(spacing: 20) {
+                    Text("GoalGal")
+                        .font(.custom("Digital Arcade Regular", size: 36))
+                        .foregroundColor(.purple)
+                    
+                    if !viewModel.fullyCompletedSkills.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Mastered Skills")
+                                .font(.custom("Digital Arcade Regular", size: 24))
+                                .foregroundColor(.purple)
+                                .padding(.horizontal)
 
-                        if let completedSkill = viewModel.firstFullyCompletedSkill {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Mastered Skill")
-                                    .font(.custom("Digital Arcade Regular", size: 24))
-                                    .foregroundColor(.purple)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.horizontal)
-
-                                MasteredSkillView(skill: completedSkill)
-                                    .padding(.horizontal)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 16) {
+                                    ForEach(viewModel.fullyCompletedSkills, id: \.id) { skill in
+                                        MasteredSkillView(skill: skill)
+                                    }
+                                }
+                                .padding(.horizontal)
                             }
                         }
-
-                        // Categories grid
-                        categoriesGrid
-                            .padding(.horizontal)
                     }
-                    .padding(.vertical)
+                    skillsGrid
+                        .padding(.horizontal)
                 }
-                .navigationBarTitleDisplayMode(.inline)
+                .padding(.vertical)
             }
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 
-    private var categoriesGrid: some View {
+    private var skillsGrid: some View {
         LazyVGrid(
             columns: [
                 GridItem(.flexible(), spacing: 12),
@@ -57,15 +58,15 @@ struct HomeView: View {
             ],
             spacing: 12
         ) {
-            ForEach(viewModel.categories, id: \.self) { category in
-                let categoryViewModel = CategoryViewModel(category: category, service: service)
+            ForEach(viewModel.categories) { skill in
+                let skillViewModel = SkillDetailViewModel(skill: skill, service: service)
 
                 NavigationLink {
-                    CheckpointsView(viewModel: categoryViewModel)
+                    SkillDetailView(viewModel: skillViewModel)
                 } label: {
-                    CategoryCard(
-                        viewModel: categoryViewModel,
-                        isCompleted: viewModel.completedCategories.contains(category.name)
+                    SkillCard(
+                        viewModel: skillViewModel,
+                        isCompleted: viewModel.completedCategories.contains(skill.name)
                     )
                 }
             }
@@ -73,36 +74,36 @@ struct HomeView: View {
     }
 }
 
-struct CategoryCard: View {
-    @ObservedObject var viewModel: CategoryViewModel
+struct SkillCard: View {
+    @ObservedObject var viewModel: SkillDetailViewModel
     let isCompleted: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Text(viewModel.category.name.capitalized)
+                Text(viewModel.skill.name.capitalized)
                     .font(.headline)
                     .foregroundColor(.primary)
-                
+
                 Spacer()
-                
+
                 if isCompleted {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                         .imageScale(.large)
                 }
             }
-            
+
             ProgressView(value: progress)
                 .tint(progress == 1 ? .purple : .pink)
-            
+
             HStack {
-                Text("\(viewModel.category.items.filter { $0.progress == 5 }.count)/\(viewModel.category.items.count)")
+                Text("\(viewModel.skill.items.filter { $0.progress == 5 }.count)/\(viewModel.skill.items.count)")
                     .font(.custom("Digital Arcade Regular", size: 10))
                     .foregroundColor(.purple)
-                
+
                 Spacer()
-                
+
                 Image(systemName: "chevron.right")
                     .font(.caption)
                     .foregroundColor(.purple)
@@ -119,10 +120,8 @@ struct CategoryCard: View {
     }
 
     private var progress: Double {
-        let completedItems = viewModel.category.items.filter { $0.progress == 5 }.count
-        return viewModel.category.items.isEmpty ? 0 : Double(completedItems) / Double(viewModel.category.items.count)
+        let completedItems = viewModel.skill.items.filter { $0.progress == 5 }.count
+        return viewModel.skill.items.isEmpty ? 0 : Double(completedItems) / Double(viewModel.skill.items.count)
     }
 }
-
-
 

@@ -81,6 +81,15 @@ class SkillsService: ObservableObject {
         save(categories: updatedCategories)
     }
     
+    func updateSkillProgress(for skillName: String, progress: Int) {
+        guard let index = categories.firstIndex(where: { $0.name == skillName }) else { return }
+        
+        categories[index].progress = progress
+        skillSubject.send(categories)
+        
+        save(categories: categories)
+    }
+    
     func save(categories: [Skill]) {
         let jsonEncoder = JSONEncoder()
         jsonEncoder.outputFormatting = .prettyPrinted

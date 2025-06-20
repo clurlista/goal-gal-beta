@@ -27,7 +27,7 @@ struct MasteredSkillView: View {
             Image(systemName: "checkmark.seal.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(maxWidth: 150, maxHeight: 150)
+                .frame(maxWidth: 40, maxHeight: 40)
                 .foregroundColor(.green)
                 .padding()
         }

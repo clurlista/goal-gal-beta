@@ -60,11 +60,8 @@ class HomeViewModel: ObservableObject {
 
 extension HomeViewModel {
     
-    /// Returns the first skill where all criteria are completed (progress == 5)
-    var firstFullyCompletedSkill: Skill? {
-        categories.first(where: { skill in
-            !skill.items.isEmpty && skill.items.allSatisfy { $0.progress == 5 }
-        })
+    var fullyCompletedSkills: [Skill] {
+        categories.filter { !$0.items.isEmpty && $0.items.allSatisfy { $0.progress == 5 } }
     }
 
     /// Returns the first mastered skill criteria (progress == 5) from any skill

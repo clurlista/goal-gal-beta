@@ -1,58 +1,38 @@
 [
     {
+        "id": "skill1",
         "name": "dribbling",
         "items": [
-            {
-                "name": "Keep close control",
-                "progress": 0
-            },
-            {
-                "name": "Change direction quickly",
-                "progress": 0
-            },
-            {
-                "name": "Protect the ball from opponents",
-                "progress": 0
-            }
-        ]
+            { "name": "Keep close control", "progress": 0 },
+            { "name": "Change direction quickly", "progress": 0 },
+            { "name": "Protect the ball from opponents", "progress": 0 }
+        ],
+        "criteriaDescription": "Keep close control. Change direction quickly. Protect the ball from opponents",
+        "progress": 0
     },
     {
+        "id": "skill2",
         "name": "Header",
         "items": [
-            {
-                "name": "The technique of hitting the ball with your head.",
-                "progress": 0
-            },
-            {
-                "name": "Keep eyes on the ball",
-                "progress": 0
-            },
-            {
-                "name": "Use forehead to strike",
-                "progress": 0
-            },
-            {
-                "name": "Generate power with neck muscles",
-                "progress": 0
-            }
-        ]
+            { "name": "The technique of hitting the ball with your head.", "progress": 0 },
+            { "name": "Keep eyes on the ball", "progress": 0 },
+            { "name": "Use forehead to strike", "progress": 0 },
+            { "name": "Generate power with neck muscles", "progress": 0 }
+        ],
+        "criteriaDescription": "The technique of hitting the ball with your head. Keep eyes on the ball. Use forehead to strike. Generate power with neck muscles",
+        "progress": 0
     },
     {
+        "id": "skill3",
         "name": "Keepie-Uppie",
         "items": [
-            {
-                "name": "Use feet to juggle",
-                "progress": 0
-            },
-            {
-                "name": "Control ball height",
-                "progress": 0
-            },
-            {
-                "name": "Maintain focus",
-                "progress": 0
-            }
-        ]
+            { "name": "Use feet to juggle", "progress": 0 },
+            { "name": "Control ball height", "progress": 0 },
+            { "name": "Maintain focus", "progress": 0 }
+        ],
+        "criteriaDescription": "Use feet to juggle. Control ball height. Maintain focus",
+        "progress": 0
     }
 ]
+
 

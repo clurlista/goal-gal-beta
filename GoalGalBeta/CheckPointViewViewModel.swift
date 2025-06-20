@@ -48,10 +48,7 @@ class CheckPointViewViewModel: ObservableObject {
                     self.checkPoint.progress = boundedProgress
                     self.service.updateProgress(for: self.checkPoint)
                     
-                    // Award 50 XP when checkpoint is completed
                     if boundedProgress == 5 {
-                        // Update the total XP through the service's categories publisher
-                        // This will trigger HomeViewModel's updateTotalXP method
                         self.service.skillSubject.send(self.service.categories)
                     }
                 }
