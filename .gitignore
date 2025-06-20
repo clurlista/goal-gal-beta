@@ -16,3 +16,5 @@ xcuserdata/
 .build/
 Packages/
 .swiftpm/xcod
+
+.DS_Store
