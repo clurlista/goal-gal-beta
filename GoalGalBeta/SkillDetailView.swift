@@ -19,13 +19,11 @@ struct SkillDetailView: View {
                     .padding(.bottom, 10)
 
                 ForEach(viewModel.criterionViewModels) { checkpointVM in
-                    CheckPointView(viewModel: checkpointVM) {
-                        viewModel.updateProgress(for: checkpointVM.criterion)
-                    }
+                    CheckPointView(viewModel: checkpointVM)
                 }
             }
-            .padding()
         }
+        .padding()
         .overlay(
             Group {
                 if showConfetti {
@@ -50,3 +48,4 @@ struct SkillDetailView: View {
         }
     }
 }
+

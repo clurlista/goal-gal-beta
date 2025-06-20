@@ -20,22 +20,26 @@ class SkillDetailViewModel: ObservableObject {
         self.service = service
         self.criterionViewModels = skill.items.map { SkillCriteriaViewModel(criterion: $0) }
 
-        $criterionViewModels
-            .map { $0.allSatisfy { $0.criterion.progress == 5 } }
-            .assign(to: &$isCompleted)
-    }
+        criterionViewModels
+            .publisher
+            .flatMap { $0.$criterion }
+            .map { _ in
+                self.criterionViewModels.allSatisfy { $0.criterion.progress == 5 }
+            }
+            .receive(on: RunLoop.main)
+            .assign(to: \.isCompleted, on: self)
+            .store(in: &cancellables)
 
-    func updateProgress(for criterion: SkillCriteria) {
-        if let index = skill.items.firstIndex(where: { $0.id == criterion.id }) {
-            skill.items[index].progress = criterion.progress
+        criterionViewModels.forEach { vm in
+            vm.$criterion
+                .sink { [weak self] updated in
+                    guard let self else { return }
+                    if let index = self.skill.items.firstIndex(where: { $0.id == updated.id }) {
+                        self.skill.items[index] = updated
+                        self.service.updateProgress(for: updated)
+                    }
+                }
+                .store(in: &cancellables)
         }
-
-        if let index = criterionViewModels.firstIndex(where: { $0.criterion.id == criterion.id }) {
-            criterionViewModels[index].criterion.progress = criterion.progress
-        }
-
-        isCompleted = skill.items.allSatisfy { $0.progress == 5 }
-        
-        service.updateProgress(for: criterion)
     }
 }

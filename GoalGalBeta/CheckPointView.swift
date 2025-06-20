@@ -8,7 +8,6 @@ import SwiftUI
 
 struct CheckPointView: View {
     @ObservedObject var viewModel: SkillCriteriaViewModel
-    let onProgressChange: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -26,7 +25,6 @@ struct CheckPointView: View {
             HStack {
                 Button(action: {
                     viewModel.decrementProgress()
-                    onProgressChange()
                 }) {
                     Image(systemName: "minus.circle")
                         .foregroundColor(.red)
@@ -38,7 +36,6 @@ struct CheckPointView: View {
 
                 Button(action: {
                     viewModel.incrementProgress()
-                    onProgressChange()
                 }) {
                     Image(systemName: "plus.circle")
                         .foregroundColor(.green)
