@@ -7,44 +7,26 @@
 import SwiftUI
 
 struct CheckPointView: View {
-    @ObservedObject var viewModel: SkillCriteriaViewModel
+    @ObservedObject var viewModel: CheckPointViewViewModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text(viewModel.criterion.name)
-                    .font(.headline)
-
-                Spacer()
-
-                Text("\(viewModel.criterion.progress)/5")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-
-            HStack {
-                Button(action: {
-                    viewModel.decrementProgress()
-                }) {
-                    Image(systemName: "minus.circle")
-                        .foregroundColor(.red)
+        HStack {
+            Text(viewModel.displayCheckPoint)
+            Spacer()
+            Button(action: {
+                withAnimation {
+                    viewModel.toggleCompletion()
                 }
-
-                ProgressView(value: Double(viewModel.criterion.progress), total: 5)
-                    .frame(maxWidth: .infinity)
-                    .tint(.purple)
-
-                Button(action: {
-                    viewModel.incrementProgress()
-                }) {
-                    Image(systemName: "plus.circle")
-                        .foregroundColor(.green)
-                }
+            }) {
+                Image(systemName: viewModel.isCompleted ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(viewModel.isCompleted ? .green : .gray)
+                    .imageScale(.large)
+                    .animation(.easeInOut, value: viewModel.isCompleted)
             }
         }
         .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(10)
     }
 }
+
+
 

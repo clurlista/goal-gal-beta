@@ -4,24 +4,26 @@
 //
 //  Created by Claire Lister on 19/06/2025.
 //
-
 import Foundation
 import Combine
 
 class SkillsService: ObservableObject {
     @Published private(set) var categories: [Skill] = []
+    
     let skillSubject = CurrentValueSubject<[Skill], Never>([])
-    let skillCompletedSubject = PassthroughSubject<Skill, Never>()
+    private let skillCompletedSubject = PassthroughSubject<Skill, Never>()
+    private var cancellables: Set<AnyCancellable> = []
     
     init() {
         copySocialisationJSONIfNecessary()
+        setupAutoSave()
         Task {
             await loadCategories()
         }
     }
     
     var skillsFileURL: URL {
-        getDocumentsDirectoryUrl().appending(path: "SkillsJSON.json")
+        getDocumentsDirectoryUrl().appendingPathComponent("SkillsJSON.json")
     }
     
     private func copySocialisationJSONIfNecessary() {
@@ -41,19 +43,17 @@ class SkillsService: ObservableObject {
             print("🛑 SkillsJSON.json already exists, not overwriting")
         }
     }
-
     
     func loadCategories() async {
         guard let jsonData = try? Data(contentsOf: skillsFileURL) else {
             print("❌ Unable to create json from \(skillsFileURL)")
             return
         }
-
-        // 🧪 Debug: Print the loaded JSON string
+        
         if let string = String(data: jsonData, encoding: .utf8) {
             print("🚨 Loaded JSON:\n\(string)")
         }
-
+        
         do {
             let loadedCategories = try JSONDecoder().decode([Skill].self, from: jsonData)
             DispatchQueue.main.async {
@@ -65,71 +65,77 @@ class SkillsService: ObservableObject {
         }
     }
     
+    /// Update a single SkillCriteria's completion state inside categories
     func updateProgress(for checkPoint: SkillCriteria) {
         var updatedCategories = categories
+        
+        // Find the category that contains this checkpoint
         guard let categoryIndex = updatedCategories.firstIndex(where: { category in
-            category.items.contains(where: { $0.name == checkPoint.name })
-        }) else { return }
+            category.items.contains(where: { $0.id == checkPoint.id })
+        }) else {
+            print("⚠️ Checkpoint not found in any category")
+            return
+        }
         
-        updatedCategories[categoryIndex].update(checkPoint: checkPoint)
+        updatedCategories[categoryIndex].items = updatedCategories[categoryIndex].items.map { item in
+            item.id == checkPoint.id ? checkPoint : item
+        }
         
-        // Update both the published property and subject
         categories = updatedCategories
-        skillSubject.send(updatedCategories)
-        
-        // Save the updated categories
-        save(categories: updatedCategories)
+        skillSubject.send(updatedCategories) // ✅ Auto-save will now handle saving
+
+        let isCategoryCompleted = updatedCategories[categoryIndex].items.allSatisfy { $0.isCompleted }
+        if isCategoryCompleted {
+            categoryCompleted(category: updatedCategories[categoryIndex])
+        }
     }
     
-    func updateSkillProgress(for skillName: String, progress: Int) {
-        guard let index = categories.firstIndex(where: { $0.name == skillName }) else { return }
-        
-        categories[index].progress = progress
-        skillSubject.send(categories)
-        
-        save(categories: categories)
+    /// Notify subscribers that a category is completed
+    func categoryCompleted(category: Skill) {
+        skillCompletedSubject.send(category)
     }
     
+    private func setupAutoSave() {
+        skillSubject
+            .debounce(for: .seconds(1), scheduler: RunLoop.main)
+            .sink { [weak self] updated in
+                self?.save(categories: updated)
+            }
+            .store(in: &cancellables)
+    }
+    
+    /// Save current categories to disk
     func save(categories: [Skill]) {
         let jsonEncoder = JSONEncoder()
         jsonEncoder.outputFormatting = .prettyPrinted
         
         do {
             let categoriesData = try jsonEncoder.encode(categories)
-            try categoriesData.write(to: self.skillsFileURL)
+            try categoriesData.write(to: skillsFileURL)
+            print("✅ Categories saved successfully")
         } catch {
-            print("Error saving categories: \(error)")
+            print("❌ Error saving categories: \(error)")
         }
     }
     
+    /// Deletes categories (overwrites file with empty or partial categories)
     func delete(categories: [Skill]) {
-        let jsonEncoder = JSONEncoder()
-        jsonEncoder.outputFormatting = .prettyPrinted
-        
-        do {
-            let categoriesData = try jsonEncoder.encode(categories)
-            try categoriesData.write(to: self.skillsFileURL)
-        } catch {
-            print("Error saving categories: \(error)")
-        }
+        save(categories: categories)
     }
     
     func getDocumentsDirectoryUrl() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let documentsDirectory = paths[0]
-        return documentsDirectory
+        return paths[0]
     }
     
-    // Publisher for categories
+    // Publisher for categories (read-only)
     var categoriesPublisher: AnyPublisher<[Skill], Never> {
         skillSubject.eraseToAnyPublisher()
     }
     
+    // Publisher for category completion events
     var categoryCompletedPublisher: AnyPublisher<Skill, Never> {
         skillCompletedSubject.eraseToAnyPublisher()
     }
-    
-    func categoryCompleted(category: Skill) {
-        skillCompletedSubject.send(category)
-    }
 }
+

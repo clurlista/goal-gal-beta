@@ -4,59 +4,68 @@
 //
 //  Created by Claire Lister on 19/06/2025.
 //
-
 import SwiftUI
 import Combine
 
 class CategoryViewModel: ObservableObject {
-    let category: Skill
-    @ObservedObject var service: SkillsService
+    @Published private(set) var category: Skill
+    private let service: SkillsService
     
+    // Expose items and progress for the UI
+    @Published var items: [SkillCriteria] = []
     @Published var progress: Int = 0
-    @Published private(set) var items: [SkillCriteria] = []
+    
     private var cancellables = Set<AnyCancellable>()
     
     var isCompleted: Bool {
-        !items.isEmpty && items.allSatisfy { $0.progress == 5 }
+        !items.isEmpty && items.allSatisfy { $0.isCompleted }
+    }
+    
+    var title: String {
+        category.name.uppercased()
     }
     
     init(category: Skill, service: SkillsService) {
         self.category = category
         self.service = service
+        
+        // Initialize local state
         self.items = category.items
+        self.progress = category.items.filter { $0.isCompleted }.count
         
-        // Calculate initial progress - items are complete when they reach 5 progress
-        self.progress = category.items.filter { $0.progress == 5 }.count
-        
-        subscribe()
+        subscribeToService()
     }
     
-    private func subscribe() {
+    private func subscribeToService() {
         service.categoriesPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] categories in
                 guard let self = self,
-                      let updatedCategory = categories.first(where: { $0.name == self.category.name }) else { return }
+                      let updatedCategory = categories.first(where: { $0.id == self.category.id }) else { return }
                 
-                // Update items
+                // Update local state to match service
+                self.category = updatedCategory
                 self.items = updatedCategory.items
+                self.progress = updatedCategory.items.filter { $0.isCompleted }.count
                 
-                // Update progress - only count items that have reached 5 progress
-                let completedItems = updatedCategory.items.filter { $0.progress == 5 }.count
-                if self.progress != completedItems {
-                    self.progress = completedItems
-                    print(self.progress)
-                    
-                    // If this update completes the category, notify the service
-                    if self.isCompleted {
-                        self.service.categoryCompleted(category: self.category)
-                    }
+                // Notify service if the category is completed
+                if self.isCompleted {
+                    self.service.categoryCompleted(category: updatedCategory)
                 }
             }
             .store(in: &cancellables)
     }
     
-    var title: String {
-        category.name.uppercased()
+    /// Toggle the completion state of a SkillCriteria and notify the service.
+    func toggleCriteriaCompletion(_ criteria: SkillCriteria) {
+        // Create a new updated criteria with toggled isCompleted, preserving the id
+        let updatedCriteria = SkillCriteria(
+            id: criteria.id,
+            name: criteria.name,
+            isCompleted: !criteria.isCompleted
+        )
+        
+        // Send the update to the service
+        service.updateProgress(for: updatedCriteria)
     }
 }

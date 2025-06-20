@@ -61,13 +61,12 @@ class HomeViewModel: ObservableObject {
 extension HomeViewModel {
     
     var fullyCompletedSkills: [Skill] {
-        categories.filter { !$0.items.isEmpty && $0.items.allSatisfy { $0.progress == 5 } }
+        categories.filter { !$0.items.isEmpty && $0.items.allSatisfy { $0.isCompleted } }
     }
-
-    /// Returns the first mastered skill criteria (progress == 5) from any skill
+    
     var firstMasteredSkillCriteria: (skill: Skill, criteria: SkillCriteria)? {
         for skill in categories {
-            if let masteredCriteria = skill.items.first(where: { $0.progress == 5 }) {
+            if let masteredCriteria = skill.items.first(where: { $0.isCompleted }) {
                 return (skill, masteredCriteria)
             }
         }

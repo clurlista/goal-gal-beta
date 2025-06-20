@@ -4,42 +4,37 @@
 //
 //  Created by Claire Lister on 20/06/2025.
 //
-import SwiftUI
+import Foundation
 import Combine
 
 class SkillDetailViewModel: ObservableObject {
-    @Published var skill: Skill
-    @Published var criterionViewModels: [SkillCriteriaViewModel]
+    @Published var checkPointViewModels: [CheckPointViewViewModel] = []
     @Published var isCompleted: Bool = false
-
-    private let service: SkillsService
+    
     private var cancellables = Set<AnyCancellable>()
-
+    
+    let skill: Skill
+    let service: SkillsService
+    
     init(skill: Skill, service: SkillsService) {
         self.skill = skill
         self.service = service
-        self.criterionViewModels = skill.items.map { SkillCriteriaViewModel(criterion: $0) }
-
-        criterionViewModels
+        
+        self.checkPointViewModels = skill.items.map { CheckPointViewViewModel(checkPoint: $0, service: service) }
+        
+        observeCompletion()
+    }
+    
+    private func observeCompletion() {
+      
+        checkPointViewModels
             .publisher
-            .flatMap { $0.$criterion }
-            .map { _ in
-                self.criterionViewModels.allSatisfy { $0.criterion.progress == 5 }
+            .flatMap { $0.$isCompleted }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self = self else { return }
+                self.isCompleted = self.checkPointViewModels.allSatisfy { $0.isCompleted }
             }
-            .receive(on: RunLoop.main)
-            .assign(to: \.isCompleted, on: self)
             .store(in: &cancellables)
-
-        criterionViewModels.forEach { vm in
-            vm.$criterion
-                .sink { [weak self] updated in
-                    guard let self else { return }
-                    if let index = self.skill.items.firstIndex(where: { $0.id == updated.id }) {
-                        self.skill.items[index] = updated
-                        self.service.updateProgress(for: updated)
-                    }
-                }
-                .store(in: &cancellables)
-        }
     }
 }

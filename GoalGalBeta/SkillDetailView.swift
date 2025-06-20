@@ -9,7 +9,7 @@ import SwiftUI
 struct SkillDetailView: View {
     @ObservedObject var viewModel: SkillDetailViewModel
     @State private var showConfetti = false
-
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -17,8 +17,8 @@ struct SkillDetailView: View {
                     .font(.custom("Digital Arcade Regular", size: 32))
                     .foregroundColor(.purple)
                     .padding(.bottom, 10)
-
-                ForEach(viewModel.criterionViewModels) { checkpointVM in
+                
+                ForEach(viewModel.checkPointViewModels) { checkpointVM in
                     CheckPointView(viewModel: checkpointVM)
                 }
             }
@@ -40,7 +40,7 @@ struct SkillDetailView: View {
             }
         }
     }
-
+    
     private func celebrate() {
         showConfetti = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -48,4 +48,5 @@ struct SkillDetailView: View {
         }
     }
 }
+
 

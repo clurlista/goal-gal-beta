@@ -94,11 +94,9 @@ struct SkillCard: View {
                 }
             }
 
-            ProgressView(value: progress)
-                .tint(progress == 1 ? .purple : .pink)
-
+            // Completion count
             HStack {
-                Text("\(viewModel.skill.items.filter { $0.progress == 5 }.count)/\(viewModel.skill.items.count)")
+                Text("\(completedItems)/\(totalItems)")
                     .font(.custom("Digital Arcade Regular", size: 10))
                     .foregroundColor(.purple)
 
@@ -119,9 +117,11 @@ struct SkillCard: View {
         )
     }
 
-    private var progress: Double {
-        let completedItems = viewModel.skill.items.filter { $0.progress == 5 }.count
-        return viewModel.skill.items.isEmpty ? 0 : Double(completedItems) / Double(viewModel.skill.items.count)
+    private var completedItems: Int {
+        viewModel.skill.items.filter { $0.isCompleted }.count
+    }
+
+    private var totalItems: Int {
+        viewModel.skill.items.count
     }
 }
-

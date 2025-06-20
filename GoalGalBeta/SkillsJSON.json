@@ -1,38 +1,39 @@
 [
-    {
-        "id": "skill1",
-        "name": "dribbling",
-        "items": [
-            { "name": "Keep close control", "progress": 0 },
-            { "name": "Change direction quickly", "progress": 0 },
-            { "name": "Protect the ball from opponents", "progress": 0 }
-        ],
-        "criteriaDescription": "Keep close control. Change direction quickly. Protect the ball from opponents",
-        "progress": 0
-    },
-    {
-        "id": "skill2",
-        "name": "Header",
-        "items": [
-            { "name": "The technique of hitting the ball with your head.", "progress": 0 },
-            { "name": "Keep eyes on the ball", "progress": 0 },
-            { "name": "Use forehead to strike", "progress": 0 },
-            { "name": "Generate power with neck muscles", "progress": 0 }
-        ],
-        "criteriaDescription": "The technique of hitting the ball with your head. Keep eyes on the ball. Use forehead to strike. Generate power with neck muscles",
-        "progress": 0
-    },
-    {
-        "id": "skill3",
-        "name": "Keepie-Uppie",
-        "items": [
-            { "name": "Use feet to juggle", "progress": 0 },
-            { "name": "Control ball height", "progress": 0 },
-            { "name": "Maintain focus", "progress": 0 }
-        ],
-        "criteriaDescription": "Use feet to juggle. Control ball height. Maintain focus",
-        "progress": 0
-    }
+  {
+    "id": "skill1",
+    "name": "dribbling",
+    "items": [
+      { "id": "dribbling1", "name": "Keep close control", "isCompleted": false },
+      { "id": "dribbling2", "name": "Change direction quickly", "isCompleted": false },
+      { "id": "dribbling3", "name": "Protect the ball from opponents", "isCompleted": false }
+    ],
+    "criteriaDescription": "Keep close control. Change direction quickly. Protect the ball from opponents",
+    "progress": 0
+  },
+  {
+    "id": "skill2",
+    "name": "Header",
+    "items": [
+      { "id": "header1", "name": "The technique of hitting the ball with your head.", "isCompleted": false },
+      { "id": "header2", "name": "Keep eyes on the ball", "isCompleted": false },
+      { "id": "header3", "name": "Use forehead to strike", "isCompleted": false },
+      { "id": "header4", "name": "Generate power with neck muscles", "isCompleted": false }
+    ],
+    "criteriaDescription": "The technique of hitting the ball with your head. Keep eyes on the ball. Use forehead to strike. Generate power with neck muscles",
+    "progress": 0
+  },
+  {
+    "id": "skill3",
+    "name": "Keepie-Uppie",
+    "items": [
+      { "id": "keepie1", "name": "Use feet to juggle", "isCompleted": false },
+      { "id": "keepie2", "name": "Control ball height", "isCompleted": false },
+      { "id": "keepie3", "name": "Maintain focus", "isCompleted": false }
+    ],
+    "criteriaDescription": "Use feet to juggle. Control ball height. Maintain focus",
+    "progress": 0
+  }
 ]
+
 
 
