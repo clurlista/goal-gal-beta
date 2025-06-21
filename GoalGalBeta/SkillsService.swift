@@ -35,30 +35,13 @@ class SkillsService: ObservableObject {
         return skills
     }
     
-    func edit(_ skill: Skill) {
-        if let index = skills.firstIndex(where: { $0.id == skill.id }) {
-            skills[index] = skill
-            save()
-        }
-    }
-    
-    func delete(_ skill: Skill) {
-        skills.removeAll { $0.id == skill.id }
-        save()
-    }
-    
-    func categoryCompleted(category: Skill) {
-        print("Category \(category.name) completed!")
-        // Any extra logic for completed categories here
-    }
-    
     func updateProgress(for skill: Skill, criteria updatedCriteria: SkillCriteria) {
         guard let skillIndex = skills.firstIndex(where: { $0.id == skill.id }) else { return }
         var updatedSkill = skills[skillIndex]
         
         if let criteriaIndex = updatedSkill.items.firstIndex(where: { $0.id == updatedCriteria.id }) {
             updatedSkill.items[criteriaIndex] = updatedCriteria
-            skills[skillIndex] = updatedSkill  // Trigger @Published update
+            skills[skillIndex] = updatedSkill
         }
     }
     
