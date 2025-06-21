@@ -4,47 +4,44 @@
 //
 //  Created by Claire Lister on 19/06/2025.
 //
-
 import Foundation
 
-struct Skill: Codable, Hashable {
+struct Skill: Codable, Identifiable {
     let name: String
-    var items: [SkillCriteria]
-    
-    mutating func update(checkPoint: SkillCriteria) {
-        guard let itemIndex = items.firstIndex(where: { $0.name == checkPoint.name }) else { return }
-        // Ensure progress stays within bounds
-        let boundedProgress = min(max(checkPoint.progress, 0), 5)
-        var updatedCheckPoint = checkPoint
-        updatedCheckPoint.progress = boundedProgress
-        items[itemIndex] = updatedCheckPoint
-    }
-}
-
-struct SkillCriteria: Codable, Hashable {
-    let name: String
+    let id: Int
+    let items: [String]
     var progress: Int
-    
-    init(name: String, progress: Int = 0) {
-        self.name = name
-        self.progress = min(max(progress, 0), 5) // Ensure initial progress is within bounds
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-    }
-    
-    static func == (lhs: SkillCriteria, rhs: SkillCriteria) -> Bool {
-        lhs.name == rhs.name
-    }
-}
 
-extension Skill: Comparable {
-    static func == (lhs: Skill, rhs: Skill) -> Bool {
-        return lhs.name == rhs.name
+    // Custom initializer
+    init(name: String, id: Int, items: [String], progress: Int = 0) {
+        self.name = name
+        self.id = id
+        self.items = items
+        self.progress = progress
     }
-    
-    static func < (lhs: Skill, rhs: Skill) -> Bool {
-        return lhs.name < rhs.name
+
+    // Init from decoder for custom handling (optional override)
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.id = try container.decode(Int.self, forKey: .id)
+        self.items = try container.decode([String].self, forKey: .items)
+        self.progress = try container.decode(Int.self, forKey: .progress)
+    }
+
+    // Optional: Custom encoder (not required unless special formatting is needed)
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(id, forKey: .id)
+        try container.encode(items, forKey: .items)
+        try container.encode(progress, forKey: .progress)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case name
+        case id
+        case items
+        case progress
     }
 }

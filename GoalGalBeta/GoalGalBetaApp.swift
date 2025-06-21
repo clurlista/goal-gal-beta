@@ -8,11 +8,10 @@
 import SwiftUI
 
 @main
-struct GoalGalBetaApp: App {
-    private let service = SkillsService()
+struct GoalGalApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView(service: service)
+            SkillsListView(viewModel: SkillsListViewModel(SkillsService: SkillsService()))
         }
     }
 }

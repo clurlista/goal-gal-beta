@@ -1,58 +1,35 @@
 [
     {
         "name": "dribbling",
+        "id": 0,
         "items": [
-            {
-                "name": "Keep close control",
-                "progress": 0
-            },
-            {
-                "name": "Change direction quickly",
-                "progress": 0
-            },
-            {
-                "name": "Protect the ball from opponents",
-                "progress": 0
-            }
-        ]
+            "Keep close control",
+            "Change direction quickly",
+            "Protect the ball from opponents"
+        ],
+        "progress": 0
     },
     {
         "name": "Header",
+        "id": 1,
         "items": [
-            {
-                "name": "The technique of hitting the ball with your head.",
-                "progress": 0
-            },
-            {
-                "name": "Keep eyes on the ball",
-                "progress": 0
-            },
-            {
-                "name": "Use forehead to strike",
-                "progress": 0
-            },
-            {
-                "name": "Generate power with neck muscles",
-                "progress": 0
-            }
-        ]
+            "The technique of hitting the ball with your head.",
+            "Keep eyes on the ball",
+            "Use forehead to strike",
+            "Generate power with neck muscles"
+        ],
+        "progress": 0
     },
     {
         "name": "Keepie-Uppie",
+        "id": 2,
         "items": [
-            {
-                "name": "Use feet to juggle",
-                "progress": 0
-            },
-            {
-                "name": "Control ball height",
-                "progress": 0
-            },
-            {
-                "name": "Maintain focus",
-                "progress": 0
-            }
-        ]
+            "Use feet to juggle",
+            "Control ball height",
+            "Maintain focus",
+        ],
+        "progress": 0
     }
 ]
+
 
