@@ -7,46 +7,63 @@
 import SwiftUI
 
 struct SkillDetailView: View {
-    @ObservedObject var viewModel: SkillDetailViewModel
+    @StateObject var viewModel: SkillDetailViewModel
     @State private var showConfetti = false
-    
+    @State private var wasCompleted = false
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+        ZStack {
+            VStack(alignment: .leading) {
                 Text(viewModel.skill.name.capitalized)
-                    .font(.custom("Digital Arcade Regular", size: 32))
-                    .foregroundColor(.purple)
-                    .padding(.bottom, 10)
-                
-                ForEach(viewModel.checkPointViewModels) { checkpointVM in
-                    CheckPointView(viewModel: checkpointVM)
+                    .font(.title)
+                    .padding()
+
+                List {
+                    ForEach(viewModel.checkPointViewModels, id: \.id) { checkpointVM in
+                        CheckPointRow(
+                            viewModel: checkpointVM,
+                            onToggle: {
+                                if viewModel.isCompleted && !wasCompleted {
+                                    triggerConfetti()
+                                }
+                                wasCompleted = viewModel.isCompleted
+                            }
+                        )
+                    }
                 }
+
+                Text(viewModel.isCompleted ? "Completed 🎉" : "In Progress")
+                    .font(.headline)
+                    .foregroundColor(viewModel.isCompleted ? .green : .orange)
+                    .padding()
+            }
+
+            if showConfetti {
+                ConfettiView(count: 30)
+                    .transition(.scale.combined(with: .opacity))
+                    .zIndex(1)
             }
         }
-        .padding()
-        .overlay(
-            Group {
-                if showConfetti {
-                    ConfettiView(count: 100)
-                        .frame(width: 300, height: 300)
-                        .transition(.scale)
-                        .animation(.easeOut, value: showConfetti)
-                }
+        .navigationTitle(viewModel.skill.name.capitalized)
+        .onAppear {
+            wasCompleted = viewModel.isCompleted
+        }
+        .onChange(of: viewModel.isCompleted) { newValue in
+            if newValue && !wasCompleted {
+                triggerConfetti()
             }
-        )
-        .onReceive(viewModel.$isCompleted) { completed in
-            if completed {
-                celebrate()
-            }
+            wasCompleted = newValue
         }
     }
-    
-    private func celebrate() {
-        showConfetti = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            showConfetti = false
+
+    private func triggerConfetti() {
+        withAnimation {
+            showConfetti = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation {
+                showConfetti = false
+            }
         }
     }
 }
-
-

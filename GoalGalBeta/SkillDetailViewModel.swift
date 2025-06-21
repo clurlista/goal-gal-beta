@@ -4,37 +4,56 @@
 //
 //  Created by Claire Lister on 20/06/2025.
 //
-import Foundation
+import SwiftUI
 import Combine
 
-class SkillDetailViewModel: ObservableObject {
-    @Published var checkPointViewModels: [CheckPointViewViewModel] = []
-    @Published var isCompleted: Bool = false
-    
+class SkillDetailViewModel: ObservableObject, Identifiable {
+    @Published private(set) var skill: Skill
+    @Published var isCompleted: Bool
+
+    private let service: SkillsService
     private var cancellables = Set<AnyCancellable>()
+
+    let id: String
     
-    let skill: Skill
-    let service: SkillsService
-    
+    @MainActor
+    var checkPointViewModels: [CheckPointViewModel] {
+        skill.items.map { criteria in
+            CheckPointViewModel(criteria: criteria, skillViewModel: self)
+        }
+    }
+
     init(skill: Skill, service: SkillsService) {
         self.skill = skill
         self.service = service
-        
-        self.checkPointViewModels = skill.items.map { CheckPointViewViewModel(checkPoint: $0, service: service) }
-        
-        observeCompletion()
+        self.id = skill.id
+        self.isCompleted = skill.isCompleted
+        observeSkillChanges()
     }
     
-    private func observeCompletion() {
-      
-        checkPointViewModels
-            .publisher
-            .flatMap { $0.$isCompleted }
+    func updateFromService() {
+        if let updated = service.skills.first(where: { $0.id == skill.id }) {
+            self.skill = updated
+            self.isCompleted = updated.isCompleted
+        }
+    }
+
+    private func observeSkillChanges() {
+        service.$skills
+            .map { $0.first(where: { $0.id == self.skill.id }) }
+            .compactMap { $0 }
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] updatedSkill in
                 guard let self = self else { return }
-                self.isCompleted = self.checkPointViewModels.allSatisfy { $0.isCompleted }
+                self.skill = updatedSkill
+                self.isCompleted = updatedSkill.isCompleted
             }
             .store(in: &cancellables)
+    }
+
+    func toggleCriteria(_ criteria: SkillCriteria) {
+        var updatedCriteria = criteria
+        updatedCriteria.isCompleted.toggle()
+        service.updateProgress(for: skill, criteria: updatedCriteria)
     }
 }

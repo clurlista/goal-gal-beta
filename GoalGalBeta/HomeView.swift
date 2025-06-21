@@ -5,17 +5,14 @@
 //  Created by Claire Lister on 19/06/2025.
 //
 import SwiftUI
-import Foundation
 
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
-    let service: SkillsService
-
+    
     init(service: SkillsService) {
         _viewModel = StateObject(wrappedValue: HomeViewModel(service: service))
-        self.service = service
     }
-
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -30,10 +27,10 @@ struct HomeView: View {
                                 .font(.custom("Digital Arcade Regular", size: 24))
                                 .foregroundColor(.purple)
                                 .padding(.horizontal)
-
+                            
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
-                                    ForEach(viewModel.fullyCompletedSkills, id: \.id) { skill in
+                                    ForEach(viewModel.fullyCompletedSkills) { skill in
                                         MasteredSkillView(skill: skill)
                                     }
                                 }
@@ -41,6 +38,7 @@ struct HomeView: View {
                             }
                         }
                     }
+                    
                     skillsGrid
                         .padding(.horizontal)
                 }
@@ -49,7 +47,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
-
+    
     private var skillsGrid: some View {
         LazyVGrid(
             columns: [
@@ -58,70 +56,57 @@ struct HomeView: View {
             ],
             spacing: 12
         ) {
-            ForEach(viewModel.categories) { skill in
-                let skillViewModel = SkillDetailViewModel(skill: skill, service: service)
-
+            ForEach(viewModel.skills) { skill in
+                let skillVM = SkillDetailViewModel(skill: skill, service: viewModel.service)
                 NavigationLink {
-                    SkillDetailView(viewModel: skillViewModel)
+                    SkillDetailView(viewModel: skillVM)
                 } label: {
-                    SkillCard(
-                        viewModel: skillViewModel,
-                        isCompleted: viewModel.completedCategories.contains(skill.name)
-                    )
+                    SkillCard(viewModel: skillVM)
                 }
             }
+            
         }
     }
-}
-
-struct SkillCard: View {
-    @ObservedObject var viewModel: SkillDetailViewModel
-    let isCompleted: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(viewModel.skill.name.capitalized)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-
-                Spacer()
-
-                if isCompleted {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                        .imageScale(.large)
+    
+    struct SkillCard: View {
+        @ObservedObject var viewModel: SkillDetailViewModel
+        
+        var body: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text(viewModel.skill.name.capitalized)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    if viewModel.isCompleted {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                            .imageScale(.large)
+                    }
+                }
+                
+                HStack {
+                    Text("\(viewModel.skill.progress)/\(viewModel.skill.items.count)")
+                        .font(.custom("Digital Arcade Regular", size: 10))
+                        .foregroundColor(.purple)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundColor(.purple)
                 }
             }
-
-            // Completion count
-            HStack {
-                Text("\(completedItems)/\(totalItems)")
-                    .font(.custom("Digital Arcade Regular", size: 10))
-                    .foregroundColor(.purple)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundColor(.purple)
-            }
+            .padding()
+            .background(Color(.systemBackground))
+            .cornerRadius(12)
+            .shadow(radius: 2)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(viewModel.isCompleted ? Color.green : Color.clear, lineWidth: 2)
+            )
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(radius: 2)
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(isCompleted ? Color.green : Color.clear, lineWidth: 2)
-        )
-    }
-
-    private var completedItems: Int {
-        viewModel.skill.items.filter { $0.isCompleted }.count
-    }
-
-    private var totalItems: Int {
-        viewModel.skill.items.count
     }
 }

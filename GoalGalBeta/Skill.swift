@@ -4,20 +4,19 @@
 //
 //  Created by Claire Lister on 19/06/2025.
 //
-import Foundation
+import SwiftUI
+import Combine
 
 struct Skill: Codable, Identifiable, Comparable {
-    var id: String { name }
+    let id: String
     var name: String
     var items: [SkillCriteria]
     var criteriaDescription: String
 
-    // Computed property for progress as count of completed items
     var progress: Int {
         items.filter { $0.isCompleted }.count
     }
 
-    // Computed property for completion status of the whole Skill
     var isCompleted: Bool {
         !items.isEmpty && items.allSatisfy { $0.isCompleted }
     }
@@ -29,13 +28,14 @@ struct Skill: Codable, Identifiable, Comparable {
     }
 
     static func == (lhs: Skill, rhs: Skill) -> Bool {
-        lhs.name == rhs.name
+        lhs.id == rhs.id
     }
     
     static func < (lhs: Skill, rhs: Skill) -> Bool {
         lhs.name < rhs.name
     }
 }
+
 
 struct SkillCriteria: Codable, Identifiable, Hashable {
     let id: String  

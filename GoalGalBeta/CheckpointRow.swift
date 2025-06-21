@@ -1,32 +1,30 @@
 //
-//  CheckPointView.swift
+//  CheckpointRow.swift
 //  GoalGalBeta
 //
-//  Created by Claire Lister on 19/06/2025.
+//  Created by Claire Lister on 21/06/2025.
 //
 import SwiftUI
 
-struct CheckPointView: View {
+struct CheckPointRow: View {
     @ObservedObject var viewModel: CheckPointViewModel
-
+    var onToggle: () -> Void  // Callback after toggle
+    
     var body: some View {
         HStack {
             Text(viewModel.displayCheckPoint)
             Spacer()
             Button(action: {
-                withAnimation {
-                    viewModel.toggleCompletion()
-                }
+                viewModel.toggleCompletion()
+                onToggle()  // Notify parent view model to refresh data
             }) {
                 Image(systemName: viewModel.isCompleted ? "checkmark.circle.fill" : "circle")
                     .foregroundColor(viewModel.isCompleted ? .green : .gray)
                     .imageScale(.large)
-                    .animation(.easeInOut, value: viewModel.isCompleted)
             }
+            .buttonStyle(BorderlessButtonStyle()) // Important for List row buttons
         }
-        .padding()
+        .padding(.vertical, 4)
     }
 }
-
-
 
