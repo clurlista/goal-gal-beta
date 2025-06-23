@@ -7,24 +7,23 @@
 import SwiftUI
 
 struct CheckPointRow: View {
-    @ObservedObject var viewModel: CheckPointViewModel
-    var onToggle: () -> Void  // Callback after toggle
-    
+    let criteria: SkillCriteria
+    let onToggle: () -> Void
+
     var body: some View {
         HStack {
-            Text(viewModel.displayCheckPoint)
+            Text(criteria.name)
+                .font(.custom("Menlo", size: 20))
             Spacer()
-            Button(action: {
-                viewModel.toggleCompletion()
-                onToggle()  // Notify parent view model to refresh data
-            }) {
-                Image(systemName: viewModel.isCompleted ? "checkmark.circle.fill" : "circle")
-                    .foregroundColor(viewModel.isCompleted ? .green : .gray)
+            Button(action: onToggle) {
+                Image(systemName: criteria.isCompleted ? "checkmark.circle.fill" : "circle")
+                    .foregroundColor(criteria.isCompleted ? .green : .gray)
                     .imageScale(.large)
             }
-            .buttonStyle(BorderlessButtonStyle()) // Important for List row buttons
+            .buttonStyle(BorderlessButtonStyle())
         }
         .padding(.vertical, 4)
     }
 }
+
 

@@ -15,13 +15,6 @@ class SkillDetailViewModel: ObservableObject, Identifiable {
     private var cancellables = Set<AnyCancellable>()
 
     let id: String
-    
-    @MainActor
-    var checkPointViewModels: [CheckPointViewModel] {
-        skill.items.map { criteria in
-            CheckPointViewModel(criteria: criteria, skillViewModel: self)
-        }
-    }
 
     init(skill: Skill, service: SkillsService) {
         self.skill = skill
@@ -30,18 +23,18 @@ class SkillDetailViewModel: ObservableObject, Identifiable {
         self.isCompleted = skill.isCompleted
         observeSkillChanges()
     }
-    
-    func updateFromService() {
-        if let updated = service.skills.first(where: { $0.id == skill.id }) {
-            self.skill = updated
-            self.isCompleted = updated.isCompleted
-        }
+
+    func toggleCriteria(_ criteria: SkillCriteria) {
+        var updated = criteria
+        updated.isCompleted.toggle()
+        service.updateProgress(for: skill, criteria: updated)
     }
 
     private func observeSkillChanges() {
         service.$skills
-            .map { $0.first(where: { $0.id == self.skill.id }) }
-            .compactMap { $0 }
+            .compactMap { skills in
+                skills.first(where: { $0.id == self.skill.id })
+            }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] updatedSkill in
                 guard let self = self else { return }
@@ -49,11 +42,5 @@ class SkillDetailViewModel: ObservableObject, Identifiable {
                 self.isCompleted = updatedSkill.isCompleted
             }
             .store(in: &cancellables)
-    }
-
-    func toggleCriteria(_ criteria: SkillCriteria) {
-        var updatedCriteria = criteria
-        updatedCriteria.isCompleted.toggle()
-        service.updateProgress(for: skill, criteria: updatedCriteria)
     }
 }

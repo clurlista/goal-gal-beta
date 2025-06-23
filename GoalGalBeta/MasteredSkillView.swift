@@ -21,7 +21,7 @@ struct MasteredSkillView: View {
                 .font(.largeTitle)
 
             Text("All skill criteria completed!")
-                .font(.caption)
+                .font(.custom("Menlo", size: 10))
                 .foregroundColor(.gray)
 
             Image(systemName: "checkmark.seal.fill")

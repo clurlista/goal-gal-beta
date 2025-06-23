@@ -10,10 +10,9 @@ import SwiftUI
 class SkillsService: ObservableObject {
     @Published var skills: [Skill] = []
     
-    init(skills: [Skill] = []) {
-        self.skills = skills
+    init() {
     }
-    
+        
     func fetchSkills() {
         if let savedSkills = load() {
             self.skills = savedSkills
@@ -35,18 +34,15 @@ class SkillsService: ObservableObject {
         return skills
     }
     
-    func updateProgress(for skill: Skill, criteria updatedCriteria: SkillCriteria) {
-        guard let skillIndex = skills.firstIndex(where: { $0.id == skill.id }) else { return }
-        var updatedSkill = skills[skillIndex]
-        
-        if let criteriaIndex = updatedSkill.items.firstIndex(where: { $0.id == updatedCriteria.id }) {
-            updatedSkill.items[criteriaIndex] = updatedCriteria
-            skills[skillIndex] = updatedSkill
+    func updateProgress(for skill: Skill, criteria: SkillCriteria) {
+        if let index = skills.firstIndex(where: { $0.id == skill.id }) {
+            var updatedSkill = skills[index]
+            updatedSkill.update(checkPoint: criteria)
+            skills[index] = updatedSkill
+            save()
         }
     }
-    
-    // MARK: - Persistence
-    
+
     private func save() {
         guard let data = try? JSONEncoder().encode(skills) else {
             print("❌ Failed to encode skills")

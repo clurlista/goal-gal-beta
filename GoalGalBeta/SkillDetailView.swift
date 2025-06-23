@@ -10,34 +10,31 @@ struct SkillDetailView: View {
     @StateObject var viewModel: SkillDetailViewModel
     @State private var showConfetti = false
     @State private var wasCompleted = false
-
+    
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {
                 Text(viewModel.skill.name.capitalized)
-                    .font(.title)
+                    .font(.custom("Digital Arcade Regular", size: 36))
                     .padding()
-
+              
                 List {
-                    ForEach(viewModel.checkPointViewModels, id: \.id) { checkpointVM in
+                    ForEach(viewModel.skill.items, id: \.id) { criteria in
                         CheckPointRow(
-                            viewModel: checkpointVM,
+                            criteria: criteria,
                             onToggle: {
-                                if viewModel.isCompleted && !wasCompleted {
-                                    triggerConfetti()
-                                }
-                                wasCompleted = viewModel.isCompleted
+                                viewModel.toggleCriteria(criteria)
                             }
                         )
                     }
                 }
-
+                
                 Text(viewModel.isCompleted ? "Completed 🎉" : "In Progress")
-                    .font(.headline)
-                    .foregroundColor(viewModel.isCompleted ? .green : .orange)
+                    .font(.custom("Digital Arcade Regular", size: 40))
+                    .foregroundColor(viewModel.isCompleted ? .green : .purple)
                     .padding()
             }
-
+            
             if showConfetti {
                 ConfettiView(count: 30)
                     .transition(.scale.combined(with: .opacity))
@@ -55,7 +52,7 @@ struct SkillDetailView: View {
             wasCompleted = newValue
         }
     }
-
+    
     private func triggerConfetti() {
         withAnimation {
             showConfetti = true

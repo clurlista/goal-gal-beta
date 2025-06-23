@@ -57,30 +57,32 @@ struct HomeView: View {
             spacing: 12
         ) {
             ForEach(viewModel.skills) { skill in
-                let skillVM = SkillDetailViewModel(skill: skill, service: viewModel.service)
                 NavigationLink {
+                    let skillVM = SkillDetailViewModel(skill: skill, service: viewModel.service)
                     SkillDetailView(viewModel: skillVM)
                 } label: {
-                    SkillCard(viewModel: skillVM)
+                    SkillCard(skill: skill)
+                        .id(skill)
                 }
             }
-            
         }
     }
     
     struct SkillCard: View {
-        @ObservedObject var viewModel: SkillDetailViewModel
+        var skill: Skill
         
+        init(skill: Skill) {
+            self.skill = skill
+            print("🧩 Skill passed to SkillCard: \(skill.name), progress: \(skill.progress)/\(skill.items.count)")
+        }
         var body: some View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text(viewModel.skill.name.capitalized)
-                        .font(.headline)
+                    Text(skill.name.capitalized)
+                        .font(.custom("Menlo", size: 15))
                         .foregroundColor(.primary)
-                    
                     Spacer()
-                    
-                    if viewModel.isCompleted {
+                    if skill.isCompleted {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
                             .imageScale(.large)
@@ -88,12 +90,10 @@ struct HomeView: View {
                 }
                 
                 HStack {
-                    Text("\(viewModel.skill.progress)/\(viewModel.skill.items.count)")
-                        .font(.custom("Digital Arcade Regular", size: 10))
+                    Text("\(skill.progress)/\(skill.items.count)")
+                        .font(.custom("Digital Arcade Regular", size: 20))
                         .foregroundColor(.purple)
-                    
                     Spacer()
-                    
                     Image(systemName: "chevron.right")
                         .font(.caption)
                         .foregroundColor(.purple)
@@ -105,7 +105,7 @@ struct HomeView: View {
             .shadow(radius: 2)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(viewModel.isCompleted ? Color.green : Color.clear, lineWidth: 2)
+                    .stroke(skill.isCompleted ? Color.green : Color.clear, lineWidth: 2)
             )
         }
     }

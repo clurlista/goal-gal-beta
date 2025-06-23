@@ -7,7 +7,7 @@
 import SwiftUI
 import Combine
 
-struct Skill: Codable, Identifiable, Comparable {
+struct Skill: Codable, Identifiable, Comparable, Equatable, Hashable {
     let id: String
     var name: String
     var items: [SkillCriteria]
@@ -25,10 +25,6 @@ struct Skill: Codable, Identifiable, Comparable {
         if let index = items.firstIndex(where: { $0.id == checkPoint.id }) {
             items[index] = checkPoint
         }
-    }
-
-    static func == (lhs: Skill, rhs: Skill) -> Bool {
-        lhs.id == rhs.id
     }
     
     static func < (lhs: Skill, rhs: Skill) -> Bool {
