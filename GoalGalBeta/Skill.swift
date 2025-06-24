@@ -10,6 +10,7 @@ import Combine
 struct Skill: Codable, Identifiable, Comparable, Equatable, Hashable {
     let id: String
     var name: String
+    var imageName: String
     var items: [SkillCriteria]
     var criteriaDescription: String
 

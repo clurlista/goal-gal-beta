@@ -17,7 +17,19 @@ struct SkillDetailView: View {
                 Text(viewModel.skill.name.capitalized)
                     .font(.custom("Digital Arcade Regular", size: 36))
                     .padding()
-              
+                
+                Spacer()
+                
+                VStack {
+                    Image(viewModel.skill.imageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300, height: 300) 
+                }
+                .frame(maxWidth: .infinity)
+                
+                Spacer()
+
                 List {
                     ForEach(viewModel.skill.items, id: \.id) { criteria in
                         CheckPointRow(

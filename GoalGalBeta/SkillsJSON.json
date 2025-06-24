@@ -1,7 +1,8 @@
 [
   {
     "id": "skill1",
-    "name": "dribbling",
+    "name": "Dribbling",
+    "imageName": "dribbling",
     "items": [
       { "id": "dribbling1", "name": "Keep close control", "isCompleted": false },
       { "id": "dribbling2", "name": "Change direction quickly", "isCompleted": false },
@@ -13,6 +14,7 @@
   {
     "id": "skill2",
     "name": "Header",
+    "imageName": "header",
     "items": [
       { "id": "header1", "name": "The technique of hitting the ball with your head.", "isCompleted": false },
       { "id": "header2", "name": "Keep eyes on the ball", "isCompleted": false },
@@ -25,6 +27,7 @@
   {
     "id": "skill3",
     "name": "Keepie-Uppie",
+    "imageName": "keepie-uppie",
     "items": [
       { "id": "keepie1", "name": "Use feet to juggle", "isCompleted": false },
       { "id": "keepie2", "name": "Control ball height", "isCompleted": false },
@@ -32,8 +35,178 @@
     ],
     "criteriaDescription": "Use feet to juggle. Control ball height. Maintain focus",
     "progress": 0
-  }
+  },
+  {
+    "id": "skill4",
+    "name": "Passing",
+    "imageName": "passing",
+    "items": [
+      { "id": "passing1", "name": "Pass with both feet", "isCompleted": false },
+      { "id": "passing2", "name": "Use correct weight and timing", "isCompleted": false },
+      { "id": "passing3", "name": "Look up before passing", "isCompleted": false },
+      { "id": "passing4", "name": "Use different types of passes (ground, lofted)", "isCompleted": false }
+    ],
+    "criteriaDescription": "Pass with both feet. Use correct weight and timing. Look up before passing. Use different types of passes (ground, lofted)",
+    "progress": 0
+  },
+  {
+    "id": "skill5",
+    "name": "Shooting",
+    "imageName": "shooting",
+    "items": [
+      { "id": "shooting1", "name": "Strike with laces for power", "isCompleted": false },
+      { "id": "shooting2", "name": "Place shots with inside of foot", "isCompleted": false },
+      { "id": "shooting3", "name": "Keep body over the ball", "isCompleted": false },
+      { "id": "shooting4", "name": "Follow through towards target", "isCompleted": false }
+    ],
+    "criteriaDescription": "Strike with laces for power. Place shots with inside of foot. Keep body over the ball. Follow through towards target",
+    "progress": 0
+  },
+  {
+    "id": "skill6",
+    "name": "Tackling",
+    "imageName": "tackling",
+    "items": [
+      { "id": "tackling1", "name": "Time your tackle accurately", "isCompleted": false },
+      { "id": "tackling2", "name": "Stay on your feet", "isCompleted": false },
+      { "id": "tackling3", "name": "Win the ball cleanly", "isCompleted": false },
+      { "id": "tackling4", "name": "Recover quickly after a challenge", "isCompleted": false }
+    ],
+    "criteriaDescription": "Time your tackle accurately. Stay on your feet. Win the ball cleanly. Recover quickly after a challenge",
+    "progress": 0
+  },
+  {
+    "id": "skill7",
+    "name": "Goalkeeping",
+    "imageName": "goalkeeping",
+    "items": [
+      { "id": "goalkeeping1", "name": "Position yourself correctly", "isCompleted": false },
+      { "id": "goalkeeping2", "name": "Catch and hold the ball", "isCompleted": false },
+      { "id": "goalkeeping3", "name": "Make diving saves", "isCompleted": false },
+      { "id": "goalkeeping4", "name": "Distribute quickly and accurately", "isCompleted": false }
+    ],
+    "criteriaDescription": "Position yourself correctly. Catch and hold the ball. Make diving saves. Distribute quickly and accurately",
+    "progress": 0
+  },
+  {
+    "id": "skill8",
+    "name": "Ball control",
+    "imageName": "ball-control",
+    "items": [
+      { "id": "control1", "name": "Control with different parts of the foot", "isCompleted": false },
+      { "id": "control2", "name": "First touch under pressure", "isCompleted": false },
+      { "id": "control3", "name": "Control the ball in the air", "isCompleted": false },
+      { "id": "control4", "name": "Control using thighs and chest", "isCompleted": false }
+    ],
+    "criteriaDescription": "Control with different parts of the foot. First touch under pressure. Control the ball in the air. Control using thighs and chest",
+    "progress": 0
+  },
+  {
+    "id": "skill9",
+    "name": "Crossing",
+    "imageName": "crossing",
+    "items": [
+      { "id": "crossing1", "name": "Deliver accurate crosses", "isCompleted": false },
+      { "id": "crossing2", "name": "Choose between low and high crosses", "isCompleted": false },
+      { "id": "crossing3", "name": "Time the cross based on teammates' runs", "isCompleted": false },
+      { "id": "crossing4", "name": "Use both feet for delivery", "isCompleted": false }
+    ],
+    "criteriaDescription": "Deliver accurate crosses. Choose between low and high crosses. Time the cross based on teammates' runs. Use both feet for delivery",
+    "progress": 0
+  },
+  {
+    "id": "skill10",
+    "name": "Positioning",
+    "imageName": "positioning",
+    "items": [
+      { "id": "positioning1", "name": "Stay goal side of the opponent", "isCompleted": false },
+      { "id": "positioning2", "name": "Anticipate opponent movement", "isCompleted": false },
+      { "id": "positioning3", "name": "Find space off the ball", "isCompleted": false },
+      { "id": "positioning4", "name": "Support teammates with proper spacing", "isCompleted": false }
+    ],
+    "criteriaDescription": "Stay goal side of the opponent. Anticipate opponent movement. Find space off the ball. Support teammates with proper spacing",
+    "progress": 0
+  },
+  {
+    "id": "skill11",
+    "name": "Set pieces",
+    "imageName": "set-pieces",
+    "items": [
+      { "id": "setpieces1", "name": "Take accurate free kicks", "isCompleted": false },
+      { "id": "setpieces2", "name": "Time runs for corners", "isCompleted": false },
+      { "id": "setpieces3", "name": "Mark players defensively during set pieces", "isCompleted": false },
+      { "id": "setpieces4", "name": "Understand tactical variations", "isCompleted": false }
+    ],
+    "criteriaDescription": "Take accurate free kicks. Time runs for corners. Mark players defensively during set pieces. Understand tactical variations",
+    "progress": 0
+  },
+  {
+    "id": "skill12",
+    "name": "1v1 defending",
+    "imageName": "1v1-defending",
+    "items": [
+      { "id": "defend1", "name": "Stay low and balanced", "isCompleted": false },
+      { "id": "defend2", "name": "Force opponent wide", "isCompleted": false },
+      { "id": "defend3", "name": "Time the tackle without diving in", "isCompleted": false },
+      { "id": "defend4", "name": "Recover quickly if beaten", "isCompleted": false }
+    ],
+    "criteriaDescription": "Stay low and balanced. Force opponent wide. Time the tackle without diving in. Recover quickly if beaten",
+    "progress": 0
+  },
+  {
+      "id": "skill13",
+      "name": "Stamina and fitness",
+      "imageName": "stamina-fitness",
+      "items": [
+        { "id": "fitness1", "name": "Maintain high energy levels throughout the game", "isCompleted": false },
+        { "id": "fitness2", "name": "Improve cardiovascular endurance", "isCompleted": false },
+        { "id": "fitness3", "name": "Incorporate strength training", "isCompleted": false },
+        { "id": "fitness4", "name": "Proper recovery and hydration", "isCompleted": false }
+      ],
+      "criteriaDescription": "Maintain high energy levels throughout the game. Improve cardiovascular endurance. Incorporate strength training. Proper recovery and hydration",
+      "progress": 0
+    },
+    {
+      "id": "skill14",
+      "name": "Communication",
+      "imageName": "communication",
+      "items": [
+        { "id": "comm1", "name": "Give clear instructions to teammates", "isCompleted": false },
+        { "id": "comm2", "name": "Use non-verbal signals effectively", "isCompleted": false },
+        { "id": "comm3", "name": "Maintain positive team morale", "isCompleted": false },
+        { "id": "comm4", "name": "Listen actively to teammates and coaches", "isCompleted": false }
+      ],
+      "criteriaDescription": "Give clear instructions to teammates. Use non-verbal signals effectively. Maintain positive team morale. Listen actively to teammates and coaches",
+      "progress": 0
+    },
+    {
+      "id": "skill15",
+      "name": "Mental toughness",
+      "imageName": "mental-toughness",
+      "items": [
+        { "id": "mental1", "name": "Stay focused under pressure", "isCompleted": false },
+        { "id": "mental2", "name": "Overcome setbacks quickly", "isCompleted": false },
+        { "id": "mental3", "name": "Maintain confidence throughout the game", "isCompleted": false },
+        { "id": "mental4", "name": "Visualize success before matches", "isCompleted": false }
+      ],
+      "criteriaDescription": "Stay focused under pressure. Overcome setbacks quickly. Maintain confidence throughout the game. Visualize success before matches",
+      "progress": 0
+    },
+    {
+      "id": "skill16",
+      "name": "Team tactics",
+      "imageName": "team-tactics",
+      "items": [
+        { "id": "tactics1", "name": "Understand formation roles", "isCompleted": false },
+        { "id": "tactics2", "name": "Adapt to different game plans", "isCompleted": false },
+        { "id": "tactics3", "name": "Communicate tactical changes quickly", "isCompleted": false },
+        { "id": "tactics4", "name": "Support teammates during transitions", "isCompleted": false }
+      ],
+      "criteriaDescription": "Understand formation roles. Adapt to different game plans. Communicate tactical changes quickly. Support teammates during transitions",
+      "progress": 0
+    }
 ]
+
 
 
 
