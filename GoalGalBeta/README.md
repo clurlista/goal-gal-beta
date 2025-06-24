@@ -1,6 +1,6 @@
 # Goal Gal App
 
-![My App Logo](assets/goalgaltransparentlogo.png)
+![My App Logo](Assets/goalgaltransparentlogo.png)
 
 Goal Gal is your fun, friendly football sidekick – here to help you track your skills, celebrate your wins, and show off your progress.
 
