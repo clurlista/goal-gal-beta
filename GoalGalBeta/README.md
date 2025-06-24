@@ -1,8 +1,6 @@
 # Goal Gal App
 
-<p align="center">
-  <img src="assets/goalgaltransparentlogo.png" alt="goalgaltransparentlogo" width="200"/>
-</p>
+![My App Logo](assets/goalgaltransparentlogo.png)
 
 Goal Gal is your fun, friendly football sidekick – here to help you track your skills, celebrate your wins, and show off your progress.
 
