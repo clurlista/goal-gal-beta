@@ -17,7 +17,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
-                    Text("GoalGal")
+                    Text("⚽️  GoalGal  ⚽️")
                         .font(.custom("Digital Arcade Regular", size: 36))
                         .foregroundColor(.purple)
                     
